@@ -198,31 +198,9 @@ namespace GraphicsApp
             _redoStack.Clear();
         }
 
-        private void UndoButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_undoStack.Count == 0) return;
+        private void UndoButton_Click(object sender, RoutedEventArgs e) { }
 
-            _redoStack.Push(new List<DrawingShape>(_shapes));
-            _shapes.Clear();
-            foreach (var shape in _undoStack.Pop())
-            {
-                _shapes.Add(shape);
-            }
-            UpdateCanvas();
-        }
-
-        private void RedoButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_redoStack.Count == 0) return;
-
-            _undoStack.Push(new List<DrawingShape>(_shapes));
-            _shapes.Clear();
-            foreach (var shape in _redoStack.Pop())
-            {
-                _shapes.Add(shape);
-            }
-            UpdateCanvas();
-        }
+        private void RedoButton_Click(object sender, RoutedEventArgs e) { }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
@@ -233,60 +211,7 @@ namespace GraphicsApp
             UpdateCanvas();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var settings = new XmlSerializer(typeof(List<DrawingShape>), new[] {
-                    typeof(LineShape),
-                    typeof(RectangleShape),
-                    typeof(EllipseShape),
-                    typeof(PolylineShape),
-                    typeof(PolygonShape)
-                });
-
-                using (var stream = File.Create("shapes.xml"))
-                {
-                    settings.Serialize(stream, new List<DrawingShape>(_shapes));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
-            }
-        }
-
-        private void LoadButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (!File.Exists("shapes.xml")) return;
-
-                var settings = new XmlSerializer(typeof(List<DrawingShape>), new[] {
-                    typeof(LineShape),
-                    typeof(RectangleShape),
-                    typeof(EllipseShape),
-                    typeof(PolylineShape),
-                    typeof(PolygonShape)
-                });
-
-                using (var stream = File.OpenRead("shapes.xml"))
-                {
-                    var loadedShapes = (List<DrawingShape>)settings.Deserialize(stream);
-
-                    SaveState();
-                    _shapes.Clear();
-                    foreach (var shape in loadedShapes)
-                    {
-                        _shapes.Add(shape);
-                    }
-                    UpdateCanvas();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
-            }
+        private void SaveButton_Click(object sender, RoutedEventArgs e) { }
+        private void LoadButton_Click(object sender, RoutedEventArgs e) { }
         }
     }
-}
