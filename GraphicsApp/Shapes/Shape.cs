@@ -23,5 +23,13 @@ namespace GraphicsApp.Shapes
             StartPoint = new Point(0, 0);
             EndPoint = new Point(0, 0);
         }
+        public virtual bool IsMultiPoint => false;
+
+        public virtual bool IsValid => StartPoint != EndPoint;
+
+        public virtual void AddPoint(Point point)
+        {
+            UpdateBounds(StartPoint, point);
+        }
     }
 }

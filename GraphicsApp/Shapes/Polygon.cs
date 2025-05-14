@@ -1,30 +1,52 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Collections.ObjectModel;
 
 namespace GraphicsApp.Shapes
 {
     public class PolygonShape : DrawingShape
     {
-        public PointCollection Points { get; } = new PointCollection();
+        private readonly List<Point> _points = new List<Point>();
+        private Point? _previewPoint;
 
-        public override Shape CreateVisual()
+        public override bool IsMultiPoint => true;
+        public override bool IsValid => _points.Count > 2;
+
+        public override void AddPoint(Point point)
         {
-            return new System.Windows.Shapes.Polygon
-            {
-                Points = Points,
-                Stroke = Stroke,
-                Fill = Fill,
-                StrokeThickness = StrokeThickness
-            };
+            _points.Add(point);
         }
 
         public override void UpdateBounds(Point start, Point end)
         {
-            if (Points.Count == 0) StartPoint = start;
-            Points.Add(end);
-            EndPoint = end;
+            _previewPoint = end;
+        }
+
+        public override Shape CreateVisual()
+        {
+            var polygon = new Polygon
+            {
+                Stroke = Stroke,
+                Fill = Fill,
+                StrokeThickness = StrokeThickness
+            };
+
+            foreach (var pt in _points)
+                polygon.Points.Add(pt);
+
+            if (_previewPoint.HasValue)
+                polygon.Points.Add(_previewPoint.Value);
+
+            return polygon;
+        }
+
+        public override void Reset()
+        {
+            _points.Clear();
+            _previewPoint = null;
         }
     }
 }

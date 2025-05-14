@@ -1,18 +1,12 @@
-using System;
+﻿using System;
+using GraphicsApp.Shapes;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace GraphicsApp.UndoRedo
 {
-    public class Undo_redo
+    public class ShapeHistory
     {
-        private readonly Stack<Action> _undoStack = new Stack<Action>();
-        private readonly Stack<Action> _redoStack = new Stack<Action>();
-
-        public void AddAction(Action doAction, Action undoAction) { }
-        public void Undo() { }
-
-        public void Redo() { }
-
-        public void Clear() { }
+        public void SaveState( ) { }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -9,7 +10,7 @@ namespace GraphicsApp.Shapes
     {
         public override Shape CreateVisual()
         {
-            return new System.Windows.Shapes.Rectangle
+            return new Rectangle
             {
                 Width = Math.Abs(EndPoint.X - StartPoint.X),
                 Height = Math.Abs(EndPoint.Y - StartPoint.Y),

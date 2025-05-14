@@ -56,13 +56,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Shapes\Ellipse.cs" />
-    <Compile Include="Shapes\IShapePlugin.cs" />
+    <Compile Include="Plugins\IShapePlugin.cs" />
     <Compile Include="Shapes\Line.cs" />
     <Compile Include="Shapes\Polygon.cs" />
     <Compile Include="Shapes\Polyline.cs" />
     <Compile Include="Shapes\Rectangle.cs" />
     <Compile Include="Shapes\Shape.cs" />
-    <Compile Include="Shapes\ShapeFactory.cs" />
+    <Compile Include="Factory\ShapeFactory.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

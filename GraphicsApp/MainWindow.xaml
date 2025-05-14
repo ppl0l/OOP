@@ -26,10 +26,10 @@
                 <TextBlock Text="Stroke Thickness:"/>
                 <Slider x:Name="thicknessSlider" Minimum="1" Maximum="20" Value="1"/>
             </StackPanel>
-            <Button x:Name="undoButton" Content="Undo" Margin="5" Click="UndoButton_Click"/>
-            <Button x:Name="redoButton" Content="Redo" Margin="5" Click="RedoButton_Click"/>
-            <Button x:Name="saveButton" Content="Save" Margin="5" Click="SaveButton_Click"/>
-            <Button x:Name="loadButton" Content="Load" Margin="5" Click="LoadButton_Click"/>
+            <Button x:Name="undoButton" Content="Undo" Margin="5"/>
+            <Button x:Name="redoButton" Content="Redo" Margin="5"/>
+            <Button x:Name="saveButton" Content="Save" Margin="5"/>
+            <Button x:Name="loadButton" Content="Load" Margin="5"/>
             <Button x:Name="clearButton" Content="Clear" Margin="5" Click="ClearButton_Click"/>
         </StackPanel>
 
