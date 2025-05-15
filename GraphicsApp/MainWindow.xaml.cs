@@ -1,11 +1,15 @@
 ﻿using GraphicsApp.Shapes;
+using GraphicsApp.UndoRedo;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace GraphicsApp
 {
@@ -14,6 +18,9 @@ namespace GraphicsApp
         private DrawingShape _currentShape;
         private bool _isDrawing;
         private readonly ObservableCollection<DrawingShape> _shapes = new ObservableCollection<DrawingShape>();
+        private readonly Stack<List<DrawingShape>> _undoStack = new Stack<List<DrawingShape>>();
+        private readonly Stack<List<DrawingShape>> _redoStack = new Stack<List<DrawingShape>>();
+        private readonly ShapeHistory _shapeHistory = new ShapeHistory();
 
         public MainWindow()
         {
@@ -71,6 +78,8 @@ namespace GraphicsApp
 
         private void StartNewShape(Point startPoint)
         {
+            _shapeHistory.ClearRedoStack();
+
             _currentShape = ShapeFactory.Create(shapeComboBox.SelectedItem.ToString());
             if (_currentShape == null) return;
 
@@ -83,6 +92,7 @@ namespace GraphicsApp
             _isDrawing = true;
         }
 
+
         private void DrawingCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (!_isDrawing || _currentShape == null) return;
@@ -94,7 +104,6 @@ namespace GraphicsApp
                 UpdateCanvas();
             }
         }
-
         private void DrawingCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_isDrawing || _currentShape == null || e.LeftButton != MouseButtonState.Pressed)
@@ -110,12 +119,14 @@ namespace GraphicsApp
 
             if (_currentShape.IsValid)
             {
+                SaveState();
                 _shapes.Add(_currentShape);
             }
 
             _isDrawing = false;
             _currentShape = null;
         }
+
 
         protected override void OnMouseRightButtonUp(MouseButtonEventArgs e)
         {
@@ -125,6 +136,7 @@ namespace GraphicsApp
             }
             base.OnMouseRightButtonUp(e);
         }
+
 
         private void UpdateCanvas()
         {
@@ -141,12 +153,36 @@ namespace GraphicsApp
             }
         }
 
+
+        private void SaveState()
+        {
+            _shapeHistory.SaveState(new List<DrawingShape>(_shapes));
+        }
+
+
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveState();
             _shapes.Clear();
             _isDrawing = false;
             _currentShape = null;
             UpdateCanvas();
+            _shapeHistory.Clear();
+        }
+        private void UndoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_shapeHistory.Undo(_shapes))
+            {
+                UpdateCanvas();
+            }
+        }
+
+        private void RedoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_shapeHistory.Redo(_shapes))
+            {
+                UpdateCanvas();
+            }
         }
     }
 }
